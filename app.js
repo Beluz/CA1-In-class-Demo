@@ -1,14 +1,34 @@
 var http = require('http'),
     path = require('path'),
     express = require('express'),
-    fs = require('fs'),
+    fs = require('fs'),  
     xmlParse = require('xslt-processor').xmlParse,
-    xsltProcess = require('xslt-processor').xsltProcess;
+    xsltProcess = require('xslt-processor').xsltProcess,
+    xml2js = require('xml2js');
 
 var router = express();
 var server = http.createServer(router);
 
 router.use(express.static(path.resolve(__dirname, 'views')));
+router.use(express.urlencoded({extended: true}));
+router.use(express.json());
+
+// Function to read in XML file and convert it to JSON
+function xmlFileToJs(filename, cb) {
+  var filepath = path.normalize(path.join(__dirname, filename));
+  fs.readFile(filepath, 'utf8', function(err, xmlStr) {
+    if (err) throw (err);
+    xml2js.parseString(xmlStr, {}, cb);
+  });
+}
+
+//Function to convert JSON to XML and save it
+function jsToXmlFile(filename, obj, cb) {
+  var filepath = path.normalize(path.join(__dirname, filename));
+  var builder = new xml2js.Builder();
+  var xml = builder.buildObject(obj);
+  fs.writeFile(filepath, xml, cb);
+}
 
 router.get('/', function(req, res){
 
@@ -22,7 +42,7 @@ router.get('/get/html', function(req, res) {
 
     var xml = fs.readFileSync('PaddysCafe.xml', 'utf8');
     var xsl = fs.readFileSync('PaddysCafe.xsl', 'utf8');
-    console.log(xml);
+   // console.log(xml);
     var doc = xmlParse(xml);
     var stylesheet = xmlParse(xsl);
 
@@ -30,7 +50,31 @@ router.get('/get/html', function(req, res) {
 
     res.end(result.toString());
 
+});
 
+//POST request to add JSON & xml files
+router.post('/post/json', function(req, res){ 
+    
+    //'router.post'> posts info to the function
+    function appendJSON(obj){
+        console.log(obj);
+        //function to read in XML file, converted to JSON, add a new object and write back to XML
+        xmlFileToJs('PaddysCafe.xml', function(err, result){
+            if(err) throw (err);
+                result.cafemenu.section[obj.sec_n].entree.push({'item': obj.item, 'price': obj.price}); //read xml adn converts to JSON
+                console.log(result);
+                jsToXmlFile('PaddysCafe.xml', result, function(err){
+                    if(err) console.log(err);
+                })
+        })
+    }
+
+    //call appendJSON function and pass in body of the current POST request
+    appendJSON(req.body);
+
+    //Re-direct the browser back to the page  where the POST request came from
+    res.redirect('back');
+    
 });
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {

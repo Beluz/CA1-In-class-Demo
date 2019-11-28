@@ -2,7 +2,7 @@ var gEntreeCount = 0;
 										// returns a number that represents the sum of all the selected menu
 										// item prices.
 function calculateBill(idMenuTable) {
-	var fBillTotal = 0.0;
+	var fBillTotal = 0.00;
 	var i=0;
 	
 										// find the table tag
@@ -22,11 +22,13 @@ function calculateBill(idMenuTable) {
 										// retrieve the price from the price column, which is the third column in the table
 			var oTDPrice = oTR.getElementsByTagName('TD')[2];
 										// the first child text node of the column contains the price
-			fBillTotal += parseFloat(oTDPrice.firstChild.data);
+            fBillTotal += parseFloat(oTDPrice.firstChild.data);
+            //fBillTotal += 1;
 		};
 	};
 										// return the price as a decimal number with 2 decimal places
-	return Math.round(fBillTotal*100.0)/100.0;
+    return Math.round(fBillTotal*100.0)/100.0;
+   // return fBillTotal;
 };
 
 										// This function either turns on or off the row highlighting for vegetarian
