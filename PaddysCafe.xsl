@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:template match="/">
+    <script src="js/PaddysCafeCode.js"></script>
+    <script>
+  		
+			            document.forms[1].txtBillAmt.value = calculateBill('menuTable');
+			            document.querySelector("#calcBill").addEventListener("click", function() {
+			                document.forms[1].txtBillAmt.value = calculateBill('menuTable');
+			            });
+			            document.querySelector("#showVeg").addEventListener("click", function() {
+			                highlightVegetarian("menuTable", this.checked);
+			            });
+			       
+       </script>
+       
                 <table id="menuTable" class="indent">
                     <thead>
                         <tr>
@@ -57,6 +70,18 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+</div>
+
+<div class="col-lg-14 text-right order-2">
+
+    <form class="" id="calc">
+        <p>
+            <button type="button" class="btn btn-primary" name="btnCalcBill" value="Calculate Bill" id="calcBill">Calculate Bill</button>
+            Total: €
+            <input type="text" name="txtBillAmt" />
+            <input type="checkbox" name="cbOpts" value="isVeg" id="showVeg" />
+            <label for="showVeg">Highlight Vegetarian Meals</label></p>
+    </form>
 </div>
     </xsl:template>
 </xsl:stylesheet>
