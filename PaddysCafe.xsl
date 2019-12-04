@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
     <xsl:template match="/">
     <script src="js/PaddysCafeCode.js"></script>
+    
     <script>
   		
 			            document.forms[1].txtBillAmt.value = calculateBill('menuTable');
@@ -10,7 +11,9 @@
 			            });
 			            document.querySelector("#showVeg").addEventListener("click", function() {
 			                highlightVegetarian("menuTable", this.checked);
-			            });
+                        });
+                        
+
 			       
        </script>
        
@@ -33,7 +36,7 @@
                                 </td>
                             </tr>
                             <xsl:for-each select="entree">
-                                <tr>
+                                <tr id="{position()}">
                                     <xsl:attribute name="vegetarian">
                                         <xsl:value-of select="boolean(./@vegetarian)" />
                                     </xsl:attribute>
@@ -70,6 +73,13 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
+<div class="container">
+<button id="delete" class="btn btn-block btn-danger">Delete</button>
+                    <p class="text-muted">To delete an entree, click the required row first</p>
+
+</div>
+           
+
 </div>
 
 <div class="col-lg-14 text-right order-2">
@@ -83,5 +93,6 @@
             <label for="showVeg">Highlight Vegetarian Meals</label></p>
     </form>
 </div>
+
     </xsl:template>
 </xsl:stylesheet>

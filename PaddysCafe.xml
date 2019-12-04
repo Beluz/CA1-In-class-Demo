@@ -67,13 +67,5 @@
       <item>Linguini with Grilled Porcini Mushroom</item>
       <price>9.79</price>
     </entree>
-    <entree>
-      <item>bread</item>
-      <price>20</price>
-    </entree>
-    <entree>
-      <item>carrot cake</item>
-      <price>5</price>
-    </entree>
   </section>
 </cafemenu>
